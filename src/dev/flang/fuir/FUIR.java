@@ -1986,6 +1986,19 @@ hw25 is
 
 
   /**
+   * For a clazz of concur.atomic, lookup the inner clazz of the value field.
+   *
+   * @param cl index of a clazz representing cl's value field
+   *
+   * @return the index of the requested `concur.atomic.value` field's clazz.
+   */
+  public int lookupJavaRef(int cl)
+  {
+    return lookup(cl, Types.resolved.f_fuzion_java_object_ref);
+  }
+
+
+  /**
    * For a clazz of array, lookup the inner clazz of the internal_array field.
    *
    * @param cl index of a clazz `array T` for some type parameter `T`
