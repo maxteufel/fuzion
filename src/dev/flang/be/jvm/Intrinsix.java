@@ -401,6 +401,81 @@ public class Intrinsix extends ANY implements ClassFileConstants
           return new Pair<>(res, Expr.UNIT);
         });
 
+    put("fuzion.java.string_to_java_object0",
+        (jvm, cl, pre, cc, tvalue, args) ->
+        {
+          var rc = jvm._fuir.clazz_fuzionJavaObject();
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var res = jvm.new0(rc)
+            .andThen(Expr.DUP)
+            .andThen(args.get(0))
+            .andThen(Expr.checkcast(PrimitiveType.type_byte.array()))
+            .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS, "fuzion_java_string_to_java_object0", "([B)Ljava/lang/String;", Names.JAVA_LANG_OBJECT))
+            .andThen(jvm.putfield(jref))
+            .is(jvm._types.javaType(rc));
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.java_string_to_string",
+        (jvm, cl, pre, cc, tvalue, args) ->
+        {
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          return jvm.constString(args.get(0)
+                                .andThen(jvm.getfield(jref))
+                                .andThen(Expr.invokeInterface("java/lang/String", "getBytes", "()[B", ClassFileConstants.PrimitiveType.type_byte.array(), 0)));
+        });
+
+    put("fuzion.java.array_to_java_object0",
+        (jvm, cl, pre, cc, tvalue, args) ->
+        {
+          var rc = jvm._fuir.clazz_fuzionJavaObject();
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var et = jvm._types.javaType(jvm._fuir.clazzActualGeneric(cc, 0)); // possibly resultType
+          var res = jvm.new0(rc)
+            .andThen(Expr.DUP)
+            .andThen(args.get(0))
+            .andThen(Expr.checkcast(et.array()))
+            .andThen(jvm.putfield(jref))
+            .is(jvm._types.javaType(rc));
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.array_length",
+        (jvm, cl, pre, cc, tvalue, args) ->
+        {
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var res = args.get(0)
+            .andThen(jvm.getfield(jref))
+            .andThen(Expr.ARRAYLENGTH);
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.array_get",
+        (jvm, cl, pre, cc, tvalue, args) ->
+        {
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var rt = jvm._types.resultType(cc);
+          var res = args.get(0)
+            .andThen(jvm.getfield(jref))
+            .andThen(args.get(1))
+            .andThen(rt.xaload());
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.get_static_field0",
+        (jvm, cl, pre, cc, tvalue, args) ->
+        {
+          var rc = jvm._fuir.clazzResultClazz(cc);
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var res =
+            args.get(0)
+            .andThen(jvm.getfield(jref)) // class name as String
+            .andThen(args.get(1))
+            .andThen(jvm.getfield(jref)) // class name as String, field name as String
+            ;
+          return new Pair<>(res, Expr.UNIT);
+        });
+
     put("fuzion.sys.args.count",
         (jvm, cl, pre, cc, tvalue, args) ->
         {
@@ -614,16 +689,7 @@ public class Intrinsix extends ANY implements ClassFileConstants
         });
 
     put(new String[]
-      { "fuzion.java.array_get",
-        "fuzion.java.array_length",
-        "fuzion.java.array_to_java_object0",
-        "fuzion.java.call_c0",
-        "fuzion.java.call_s0",
-        "fuzion.java.call_v0",
-        "fuzion.java.get_field0",
-        "fuzion.java.get_static_field0",
-        "fuzion.java.java_string_to_string",
-        "fuzion.java.string_to_java_object0"
+      {
       },
         (jvm, cl, pre, cc, tvalue, args) ->
         {

@@ -1605,9 +1605,9 @@ public class DFA extends ANY
         );
 
     put("fuzion.java.Java_Object.is_null"   , cl -> cl._dfa._bool );
-    put("fuzion.java.array_get"             , cl -> NYIintrinsicMissing(cl) );
-    put("fuzion.java.array_length"          , cl -> NYIintrinsicMissing(cl) );
-    put("fuzion.java.array_to_java_object0" , cl -> NYIintrinsicMissing(cl) );
+    put("fuzion.java.array_get"             , cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
+    put("fuzion.java.array_length"          , cl -> new NumericValue(cl._dfa, cl._dfa._fuir.clazzResultClazz(cl._cc)) );
+    put("fuzion.java.array_to_java_object0" , cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
     put("fuzion.java.bool_to_java_object"   , cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
     put("fuzion.java.call_c0"               , cl -> NYIintrinsicMissing(cl) );
     put("fuzion.java.call_s0"               , cl -> NYIintrinsicMissing(cl) );
@@ -1620,8 +1620,8 @@ public class DFA extends ANY
     put("fuzion.java.i32_to_java_object"    , cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
     put("fuzion.java.i64_to_java_object"    , cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
     put("fuzion.java.i8_to_java_object"     , cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
-    put("fuzion.java.java_string_to_string" , cl -> NYIintrinsicMissing(cl) );
-    put("fuzion.java.string_to_java_object0", cl -> NYIintrinsicMissing(cl) );
+    put("fuzion.java.java_string_to_string" , cl -> cl._dfa.newConstString(null, cl) );
+    put("fuzion.java.string_to_java_object0", cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
     put("fuzion.java.u16_to_java_object"    , cl -> cl._dfa.newInstance(cl._dfa._fuir.clazzResultClazz(cl._cc), null) );
   }
 

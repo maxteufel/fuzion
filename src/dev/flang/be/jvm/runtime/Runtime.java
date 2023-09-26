@@ -657,6 +657,12 @@ public class Runtime extends ANY
   }
 
 
+  public static String fuzion_java_string_to_java_object0(byte[] b)
+  {
+    return new String(b, StandardCharsets.UTF_8);
+  }
+
+
   /**
    * @param instance the effect instance that is installed
    *
