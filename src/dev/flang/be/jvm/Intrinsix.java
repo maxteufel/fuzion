@@ -466,9 +466,11 @@ public class Intrinsix extends ANY implements ClassFileConstants
         (jvm, cl, pre, cc, tvalue, args) ->
         {
           var rc = jvm._fuir.clazzResultClazz(cc);
+          var jo = jvm._fuir.clazz_fuzionJavaObject();
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
-          var res =
-            args.get(0)
+          var res = jvm.new0(rc)
+            .andThen(Expr.DUP)
+            .andThen(args.get(0))
             .andThen(jvm.getfield(jref)) // class name as String
             .andThen(args.get(1))
             .andThen(jvm.getfield(jref)) // class name as String, field name as String
@@ -476,7 +478,29 @@ public class Intrinsix extends ANY implements ClassFileConstants
                                        "fuzion_java_get_static_field0",
                                        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",
                                        Names.JAVA_LANG_OBJECT))
-            ;
+            .andThen(jvm.putfield(jref))
+            .is(jvm._types.javaType(jo));
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.get_field0",
+        (jvm, cc, tvalue, args) ->
+        {
+          var rc = jvm._fuir.clazzResultClazz(cc);
+          var jo = jvm._fuir.clazz_fuzionJavaObject();
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var res = jvm.new0(rc)
+            .andThen(Expr.DUP)
+            .andThen(args.get(0))
+            .andThen(jvm.getfield(jref)) // instanace as Object
+            .andThen(args.get(1))
+            .andThen(jvm.getfield(jref)) // instance as Object, field name as String
+            .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
+                                       "fuzion_java_get_field0",
+                                       "(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;",
+                                       Names.JAVA_LANG_OBJECT))
+            .andThen(jvm.putfield(jref))
+            .is(jvm._types.javaType(jo));
           return new Pair<>(res, Expr.UNIT);
         });
 
