@@ -31,6 +31,8 @@ import dev.flang.be.interpreter.OpenResources; // NYI: remove dependency!
 import dev.flang.util.ANY;
 import dev.flang.util.Errors;
 import java.io.StringWriter;
+
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
@@ -660,6 +662,61 @@ public class Runtime extends ANY
   public static String fuzion_java_string_to_java_object0(byte[] b)
   {
     return new String(b, StandardCharsets.UTF_8);
+  }
+
+
+  public static Object fuzion_java_get_static_field0(String clazz, String field)
+  {
+    Object result;
+
+    try
+      {
+        Class cl = Class.forName(clazz);
+        Field f = cl.getDeclaredField(field);
+        result = f.get(null);
+      }
+    catch (IllegalAccessException e)
+      {
+        Errors.fatal("IllegalAccessException when calling fuzion.java.get_static_field for field "+clazz+"."+field);
+        result = null;
+      }
+    catch (ClassNotFoundException e)
+      {
+        Errors.fatal("ClassNotFoundException when calling fuzion.java.get_static_field for field "+clazz+"."+field);
+        result = null;
+      }
+    catch (NoSuchFieldException e)
+      {
+        Errors.fatal("NoSuchFieldException when calling fuzion.java.get_static_field for field "+clazz+"."+field);
+        result = null;
+      }
+
+    return result;
+  }
+
+  public static Object fuzion_java_get_field0(Object thiz, String field)
+  {
+    Object result;
+    String clazz = null;
+
+    try
+      {
+        Class cl = thiz.getClass();
+        Field f = cl.getDeclaredField(field);
+        result = f.get(thiz);
+      }
+    catch (IllegalAccessException e)
+      {
+        Errors.fatal("IllegalAccessException when calling fuzion.java.get_static_field for field "+clazz+"."+field);
+        result = null;
+      }
+    catch (NoSuchFieldException e)
+      {
+        Errors.fatal("NoSuchFieldException when calling fuzion.java.get_static_field for field "+clazz+"."+field);
+        result = null;
+      }
+
+    return result;
   }
 
 

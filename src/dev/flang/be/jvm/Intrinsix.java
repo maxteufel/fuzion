@@ -472,6 +472,10 @@ public class Intrinsix extends ANY implements ClassFileConstants
             .andThen(jvm.getfield(jref)) // class name as String
             .andThen(args.get(1))
             .andThen(jvm.getfield(jref)) // class name as String, field name as String
+            .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
+                                       "fuzion_java_get_static_field0",
+                                       "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",
+                                       Names.JAVA_LANG_OBJECT))
             ;
           return new Pair<>(res, Expr.UNIT);
         });
