@@ -723,6 +723,134 @@ public class Runtime extends ANY
   }
 
 
+  public static Object fuzion_java_call_v0(String clName, String name, String sig, Object thiz, Object[] args)
+  {
+    if (PRECONDITIONS) require
+      (clName != null);
+
+    Object res = null;
+    Throwable err = null;
+    Method m = null;
+    Constructor co = null;
+    var  p = JavaInterface.getPars(sig);
+    if (p == null)
+      {
+        Errors.fatal("could not parse signature >>"+sig+"<<");
+      }
+    Class cl;
+    try
+      {
+        cl = Class.forName(clName);
+      }
+    catch (ClassNotFoundException e)
+      {
+        Errors.fatal("ClassNotFoundException when calling fuzion.java.call_virtual for class " +
+                           clName + " calling " + name + sig);
+        cl = Object.class; // not reached.
+      }
+    try
+      {
+        m = cl.getMethod(name, p);
+      }
+    catch (NoSuchMethodException e)
+      {
+        Errors.fatal("NoSuchMethodException when calling fuzion.java.call_virtual calling " +
+                           (cl.getName() + "." + name) + sig);
+      }
+    throw new Error("NYI");
+    // Object[] argz = instanceToJavaObjects(args);
+    // try
+    //   {
+    //     for (var i = 0; i < argz.length; i++)
+    //       {
+    //         var pi = p[i];
+    //         var ai = argz[i];
+    //         // in case parameter type is some array and argument is empty array,
+    //         // the type of the argument derived form the elements will be
+    //         // Object[], so we create a more specific array:
+    //         if (pi.isArray() && ai != null && Array.getLength(ai) == 0 && pi != ai.getClass())
+    //           {
+    //             argz[i] = Array.newInstance(pi.componentType(), 0);
+    //           }
+    //       }
+    //     res = (name == null) ? co.newInstance(argz) : m.invoke(thiz, argz);
+    //   }
+    // catch (InvocationTargetException e)
+    //   {
+    //     err = e.getCause();
+    //   }
+    // catch (InstantiationException | IllegalAccessException e)
+    //   {
+    //     err = e;
+    //   }
+    // return javaObjectToInstance(res, err, resultClazz);
+  }
+
+
+  public static Object fuzion_java_call_s0(String clName, String name, String sig, Object[] args)
+  {
+    if (PRECONDITIONS) require
+      (clName != null);
+
+    Object res = null;
+    Throwable err = null;
+    Method m = null;
+    Constructor co = null;
+    var  p = JavaInterface.getPars(sig);
+    if (p == null)
+      {
+        Errors.fatal("could not parse signature >>"+sig+"<<");
+      }
+    Class cl;
+    try
+      {
+        cl = Class.forName(clName);
+      }
+    catch (ClassNotFoundException e)
+      {
+        Errors.fatal("ClassNotFoundException when calling fuzion.java.call_static for class " +
+                           clName + " calling " + name + sig);
+        cl = Object.class; // not reached.
+      }
+    try
+      {
+        m = cl.getMethod(name,p);
+      }
+    catch (NoSuchMethodException e)
+      {
+        Errors.fatal("NoSuchMethodException when calling fuzion.java.call_static calling " +
+                           (cl.getName() + "." + name) + sig);
+      }
+    throw new Error("NYI");
+    // Object[] argz = instanceToJavaObjects(args);
+    // try
+    //   {
+    //     for (var i = 0; i < argz.length; i++)
+    //       {
+    //         var pi = p[i];
+    //         var ai = argz[i];
+    //         // in case parameter type is some array and argument is empty array,
+    //         // the type of the argument derived form the elements will be
+    //         // Object[], so we create a more specific array:
+    //         if (pi.isArray() && ai != null && Array.getLength(ai) == 0 && pi != ai.getClass())
+    //           {
+    //             argz[i] = Array.newInstance(pi.componentType(), 0);
+    //           }
+    //       }
+    //     res = (name == null) ? co.newInstance(argz) : m.invoke(thiz, argz);
+    //   }
+    // catch (InvocationTargetException e)
+    //   {
+    //     err = e.getCause();
+    //   }
+    // catch (InstantiationException | IllegalAccessException e)
+    //   {
+    //     err = e;
+    //   }
+    // return javaObjectToInstance(res, err, resultClazz);
+  }
+
+
   public static Object fuzion_java_call_c0(String clName, String sig, Object[] args)
   {
     if (PRECONDITIONS) require
