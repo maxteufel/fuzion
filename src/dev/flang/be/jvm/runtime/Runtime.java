@@ -745,7 +745,7 @@ public class Runtime extends ANY
     catch (ClassNotFoundException e)
       {
         Errors.fatal("ClassNotFoundException when calling fuzion.java.call_constructor for class " +
-                           clName + " calling " + (name == null ? "new " + clName : name ) + sig);
+                           clName + " calling " + ("new " + clName) + sig);
         cl = Object.class; // not reached.
       }
     try
@@ -757,32 +757,34 @@ public class Runtime extends ANY
         Errors.fatal("NoSuchMethodException when calling fuzion.java.call_constructor calling " +
                            ("new " + clName) + sig);
       }
-    Object[] argz = instanceToJavaObjects(args);
-    try
-      {
-        for (var i = 0; i < argz.length; i++)
-          {
-            var pi = p[i];
-            var ai = argz[i];
-            // in case parameter type is some array and argument is empty array,
-            // the type of the argument derived form the elements will be
-            // Object[], so we create a more specific array:
-            if (pi.isArray() && ai != null && Array.getLength(ai) == 0 && pi != ai.getClass())
-              {
-                argz[i] = Array.newInstance(pi.componentType(), 0);
-              }
-          }
-        res = (name == null) ? co.newInstance(argz) : m.invoke(thiz, argz);
-      }
-    catch (InvocationTargetException e)
-      {
-        err = e.getCause();
-      }
-    catch (InstantiationException | IllegalAccessException e)
-      {
-        err = e;
-      }
-    return javaObjectToInstance(res, err, resultClazz);
+
+    throw new Error("NYI");
+    // Object[] argz = instanceToJavaObjects(args);
+    // try
+    //   {
+    //     for (var i = 0; i < argz.length; i++)
+    //       {
+    //         var pi = p[i];
+    //         var ai = argz[i];
+    //         // in case parameter type is some array and argument is empty array,
+    //         // the type of the argument derived form the elements will be
+    //         // Object[], so we create a more specific array:
+    //         if (pi.isArray() && ai != null && Array.getLength(ai) == 0 && pi != ai.getClass())
+    //           {
+    //             argz[i] = Array.newInstance(pi.componentType(), 0);
+    //           }
+    //       }
+    //     res = co.newInstance(argz);
+    //   }
+    // catch (InvocationTargetException e)
+    //   {
+    //     err = e.getCause();
+    //   }
+    // catch (InstantiationException | IllegalAccessException e)
+    //   {
+    //     err = e;
+    //   }
+    // return javaObjectToInstance(res, err, resultClazz);
   }
 
 
