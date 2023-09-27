@@ -465,42 +465,95 @@ public class Intrinsix extends ANY implements ClassFileConstants
     put("fuzion.java.get_static_field0",
         (jvm, cl, pre, cc, tvalue, args) ->
         {
-          var rc = jvm._fuir.clazzResultClazz(cc);
-          var jo = jvm._fuir.clazz_fuzionJavaObject();
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
-          var res = jvm.new0(rc)
-            .andThen(Expr.DUP)
-            .andThen(args.get(0))
+          var res =
+            args.get(0)
             .andThen(jvm.getfield(jref)) // class name as String
             .andThen(args.get(1))
             .andThen(jvm.getfield(jref)) // class name as String, field name as String
             .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
                                        "fuzion_java_get_static_field0",
                                        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",
-                                       Names.JAVA_LANG_OBJECT))
-            .andThen(jvm.putfield(jref))
-            .is(jvm._types.javaType(jo));
+                                       Names.JAVA_LANG_OBJECT));
           return new Pair<>(res, Expr.UNIT);
         });
 
     put("fuzion.java.get_field0",
         (jvm, cc, tvalue, args) ->
         {
-          var rc = jvm._fuir.clazzResultClazz(cc);
-          var jo = jvm._fuir.clazz_fuzionJavaObject();
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
-          var res = jvm.new0(rc)
-            .andThen(Expr.DUP)
-            .andThen(args.get(0))
-            .andThen(jvm.getfield(jref)) // instanace as Object
+          var res =
+            args.get(0)
+            .andThen(jvm.getfield(jref)) // instance as Object
             .andThen(args.get(1))
             .andThen(jvm.getfield(jref)) // instance as Object, field name as String
             .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
                                        "fuzion_java_get_field0",
                                        "(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;",
-                                       Names.JAVA_LANG_OBJECT))
-            .andThen(jvm.putfield(jref))
-            .is(jvm._types.javaType(jo));
+                                       Names.JAVA_LANG_OBJECT));
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.call_v0",
+        (jvm, cc, tvalue, args) ->
+        {
+          var data = jvm._fuir.clazzArg(jvm._fuir.clazzArg(cc, 2), 0);
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var res =
+            args.get(0)
+            .andThen(jvm.getfield(jref)) // class_name
+            .andThen(args.get(1))
+            .andThen(jvm.getfield(jref)) // name
+            .andThen(args.get(2))
+            .andThen(jvm.getfield(jref)) // signature
+            .andThen(args.get(3))
+            .andThen(jvm.getfield(jref)) // thiz
+            .andThen(args.get(4))
+            .andThen(jvm.getfield(data)) // args
+            .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
+                                       "fuzion_java_call_c0",
+                                       "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",
+                                       Names.JAVA_LANG_OBJECT));
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.call_s0",
+        (jvm, cc, tvalue, args) ->
+        {
+          var data = jvm._fuir.clazzArg(jvm._fuir.clazzArg(cc, 2), 0);
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var res =
+            args.get(0)
+            .andThen(jvm.getfield(jref)) // class_name
+            .andThen(args.get(1))
+            .andThen(jvm.getfield(jref)) // name
+            .andThen(args.get(2))
+            .andThen(jvm.getfield(jref)) // signature
+            .andThen(args.get(3))
+            .andThen(jvm.getfield(data)) // args
+            .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
+                                       "fuzion_java_call_c0",
+                                       "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object;",
+                                       Names.JAVA_LANG_OBJECT));
+          return new Pair<>(res, Expr.UNIT);
+        });
+
+    put("fuzion.java.call_c0",
+        (jvm, cc, tvalue, args) ->
+        {
+          var data = jvm._fuir.clazzArg(jvm._fuir.clazzArg(cc, 2), 0);
+          var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var res =
+            args.get(0)
+            .andThen(jvm.getfield(jref)) // class_name
+            .andThen(args.get(1))
+            .andThen(jvm.getfield(jref)) // signature
+            .andThen(args.get(2))
+            .andThen(jvm.getfield(data)) // args
+            .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
+                                       "fuzion_java_call_c0",
+                                       "(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object;",
+                                       Names.JAVA_LANG_OBJECT));
           return new Pair<>(res, Expr.UNIT);
         });
 

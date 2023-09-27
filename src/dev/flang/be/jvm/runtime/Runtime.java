@@ -26,12 +26,14 @@ Fuzion language implementation.  If not, see <https://www.gnu.org/licenses/>.
 
 package dev.flang.be.jvm.runtime;
 
+import dev.flang.be.interpreter.JavaInterface;
 import dev.flang.be.interpreter.OpenResources; // NYI: remove dependency!
 
 import dev.flang.util.ANY;
 import dev.flang.util.Errors;
 import java.io.StringWriter;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -694,6 +696,7 @@ public class Runtime extends ANY
     return result;
   }
 
+
   public static Object fuzion_java_get_field0(Object thiz, String field)
   {
     Object result;
@@ -717,6 +720,69 @@ public class Runtime extends ANY
       }
 
     return result;
+  }
+
+
+  public static Object fuzion_java_call_c0(String clName, String sig, Object[] args)
+  {
+    if (PRECONDITIONS) require
+      (clName != null);
+
+    Object res = null;
+    Throwable err = null;
+    Method m = null;
+    Constructor co = null;
+    var p = JavaInterface.getPars(sig);
+    if (p == null)
+      {
+        Errors.fatal("could not parse signature >>"+sig+"<<");
+      }
+    Class cl;
+    try
+      {
+        cl = Class.forName(clName);
+      }
+    catch (ClassNotFoundException e)
+      {
+        Errors.fatal("ClassNotFoundException when calling fuzion.java.call_constructor for class " +
+                           clName + " calling " + (name == null ? "new " + clName : name ) + sig);
+        cl = Object.class; // not reached.
+      }
+    try
+      {
+        co = cl.getConstructor(p);
+      }
+    catch (NoSuchMethodException e)
+      {
+        Errors.fatal("NoSuchMethodException when calling fuzion.java.call_constructor calling " +
+                           ("new " + clName) + sig);
+      }
+    Object[] argz = instanceToJavaObjects(args);
+    try
+      {
+        for (var i = 0; i < argz.length; i++)
+          {
+            var pi = p[i];
+            var ai = argz[i];
+            // in case parameter type is some array and argument is empty array,
+            // the type of the argument derived form the elements will be
+            // Object[], so we create a more specific array:
+            if (pi.isArray() && ai != null && Array.getLength(ai) == 0 && pi != ai.getClass())
+              {
+                argz[i] = Array.newInstance(pi.componentType(), 0);
+              }
+          }
+        res = (name == null) ? co.newInstance(argz) : m.invoke(thiz, argz);
+      }
+    catch (InvocationTargetException e)
+      {
+        err = e.getCause();
+      }
+    catch (InstantiationException | IllegalAccessException e)
+      {
+        err = e;
+      }
+    return javaObjectToInstance(res, err, resultClazz);
   }
 
 

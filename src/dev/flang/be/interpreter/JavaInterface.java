@@ -160,7 +160,7 @@ public class JavaInterface extends ANY
    *
    * @return a new parameter type array.
    */
-  static Class[] getPars(String d)
+  public static Class[] getPars(String d)
   {
     Class[] result;
 
