@@ -479,7 +479,7 @@ public class Intrinsix extends ANY implements ClassFileConstants
         });
 
     put("fuzion.java.get_field0",
-        (jvm, cc, tvalue, args) ->
+        (jvm, cl, pre, cc, tvalue, args) ->
         {
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
           var res =
@@ -495,7 +495,7 @@ public class Intrinsix extends ANY implements ClassFileConstants
         });
 
     put("fuzion.java.call_v0",
-        (jvm, cc, tvalue, args) ->
+        (jvm, cl, pre, cc, tvalue, args) ->
         {
           var data = jvm._fuir.clazzArg(jvm._fuir.clazzArgClazz(cc, 2), 0);
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
@@ -518,7 +518,7 @@ public class Intrinsix extends ANY implements ClassFileConstants
         });
 
     put("fuzion.java.call_s0",
-        (jvm, cc, tvalue, args) ->
+        (jvm, cl, pre, cc, tvalue, args) ->
         {
           var data = jvm._fuir.clazzArg(jvm._fuir.clazzArgClazz(cc, 2), 0);
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
@@ -539,7 +539,7 @@ public class Intrinsix extends ANY implements ClassFileConstants
         });
 
     put("fuzion.java.call_c0",
-        (jvm, cc, tvalue, args) ->
+        (jvm, cl, pre, cc, tvalue, args) ->
         {
           var data = jvm._fuir.clazzArg(jvm._fuir.clazzArgClazz(cc, 2), 0);
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
