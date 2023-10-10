@@ -471,16 +471,17 @@ public class Intrinsix extends ANY implements ClassFileConstants
           var res =
             jvm.new0(rc)
             .andThen(Expr.DUP)
+            .andThen(Expr.checkcast(jvm._types.javaType(jvm._fuir.clazz_fuzionJavaObject())))
             .andThen(args.get(0))
-            .andThen(jvm.getfield(jref, JAVA_LANG_STRING)) // class name as String
+            .andThen(jvm.getfield(jref)) // class name as String
             .andThen(args.get(1))
-            .andThen(jvm.getfield(jref, JAVA_LANG_STRING)) // class name as String, field name as String
+            .andThen(jvm.getfield(jref)) // class name as String, field name as String
             .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
                                        "fuzion_java_get_static_field0",
                                        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",
-                                       // "(LfzI_Any;LfzI_Any;)Ljava/lang/Object;",
                                        Names.JAVA_LANG_OBJECT))
-            .andThen(jvm.putfield(jref, JAVA_LANG_OBJECT))
+            .andThen(jvm.putfield(jref))
+            .andThen(Expr.checkcast(jvm._types.javaType(rc)))
             .is(jvm._types.javaType(rc));
           return new Pair<>(res, Expr.UNIT);
         });
