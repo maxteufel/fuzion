@@ -466,10 +466,11 @@ public class Intrinsix extends ANY implements ClassFileConstants
         (jvm, cl, pre, cc, tvalue, args) ->
         {
           var rc = jvm._fuir.clazzResultClazz(cc);
+          var rcv = jvm._fuir.clazzAsValue(rc);
           var rt = jvm._types.javaType(rc);
-          var jobj = jvm._fuir.clazz_fuzionJavaObject();
-          var jt = jvm._types.javaType(jobj);
+          var jt = jvm._types.javaType(jvm._fuir.clazz_fuzionJavaObject());
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var jref2 = jvm._fuir.clazzField(rcv, 0);
           var res =
             jvm.new0(rc)
             .andThen(Expr.DUP)
@@ -486,10 +487,9 @@ public class Intrinsix extends ANY implements ClassFileConstants
                                        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;",
                                        Names.JAVA_LANG_OBJECT))
             .andThen(Expr.checkcast(JAVA_LANG_OBJECT))
-            // .andThen(Expr.POP2)
-            .andThen(jvm.putfield(jref))
+            .andThen(jvm.putfield(jref2))
             .andThen(Expr.checkcast(rt))
-            .is(jvm._types.javaType(rc));
+            .is(rt);
           return new Pair<>(res, Expr.UNIT);
         });
 
