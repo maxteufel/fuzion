@@ -422,7 +422,7 @@ public class Intrinsix extends ANY implements ClassFileConstants
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
           return jvm.constString(args.get(0)
                                 .andThen(jvm.getfield(jref))
-                                .andThen(Expr.invokeInterface("java/lang/String", "getBytes", "()[B", ClassFileConstants.PrimitiveType.type_byte.array(), 0)));
+                                .andThen(Expr.invokeInterface("java/lang/String", "getBytes", "()[B", ClassFileConstants.PrimitiveType.type_byte.array())));
         });
 
     put("fuzion.java.array_to_java_object0",
