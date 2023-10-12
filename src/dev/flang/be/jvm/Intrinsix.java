@@ -512,23 +512,44 @@ public class Intrinsix extends ANY implements ClassFileConstants
     put("fuzion.java.call_v0",
         (jvm, cl, pre, cc, tvalue, args) ->
         {
+          var rc = jvm._fuir.clazzResultClazz(cc);
+          var rcv = jvm._fuir.clazzAsValue(rc);
+          var rt = jvm._types.javaType(rc);
           var data = jvm._fuir.clazzArg(jvm._fuir.clazzArgClazz(cc, 2), 0);
+          var jt = jvm._types.javaType(jvm._fuir.clazz_fuzionJavaObject());
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
+          var jref2 = jvm._fuir.clazzField(rcv, 0);
           var res =
-            args.get(0)
+            jvm.new0(rc)
+            .andThen(Expr.DUP)
+            .andThen(args.get(0))
+            .andThen(Expr.checkcast(jt))
             .andThen(jvm.getfield(jref)) // class_name
+            .andThen(Expr.checkcast(JAVA_LANG_STRING))
             .andThen(args.get(1))
+            .andThen(Expr.checkcast(jt))
             .andThen(jvm.getfield(jref)) // name
+            .andThen(Expr.checkcast(JAVA_LANG_STRING))
             .andThen(args.get(2))
+            .andThen(Expr.checkcast(jt))
             .andThen(jvm.getfield(jref)) // signature
+            .andThen(Expr.checkcast(JAVA_LANG_STRING))
             .andThen(args.get(3))
+            .andThen(Expr.checkcast(jt))
             .andThen(jvm.getfield(jref)) // thiz
+            .andThen(Expr.checkcast(JAVA_LANG_OBJECT))
             .andThen(args.get(4))
+            .andThen(Expr.checkcast(jt))
             .andThen(jvm.getfield(data)) // args
+            .andThen(Expr.checkcast(JAVA_LANG_STRING.array()))
             .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
                                        "fuzion_java_call_c0",
                                        "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",
-                                       Names.JAVA_LANG_OBJECT));
+                                       Names.JAVA_LANG_OBJECT))
+            .andThen(Expr.checkcast(JAVA_LANG_OBJECT))
+            .andThen(jvm.putfield(jref2))
+            .andThen(Expr.checkcast(rt))
+            .is(rt);
           return new Pair<>(res, Expr.UNIT);
         });
 
