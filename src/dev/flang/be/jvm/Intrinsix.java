@@ -512,17 +512,11 @@ public class Intrinsix extends ANY implements ClassFileConstants
     put("fuzion.java.call_v0",
         (jvm, cl, pre, cc, tvalue, args) ->
         {
-          var rc = jvm._fuir.clazzResultClazz(cc);
-          var rcv = jvm._fuir.clazzAsValue(rc);
-          var rt = jvm._types.javaType(rc);
           var data = jvm._fuir.clazzArg(jvm._fuir.clazzArgClazz(cc, 2), 0);
           var jt = jvm._types.javaType(jvm._fuir.clazz_fuzionJavaObject());
           var jref = jvm._fuir.clazz_fuzionJavaObject_Ref();
-          var jref2 = jvm._fuir.clazzField(rcv, 0);
-          var res =
-            jvm.new0(rc)
-            .andThen(Expr.DUP)
-            .andThen(args.get(0))
+          var exec =
+            args.get(0)
             .andThen(Expr.checkcast(jt))
             .andThen(jvm.getfield(jref)) // class_name
             .andThen(Expr.checkcast(JAVA_LANG_STRING))
@@ -535,7 +529,7 @@ public class Intrinsix extends ANY implements ClassFileConstants
             .andThen(jvm.getfield(jref)) // signature
             .andThen(Expr.checkcast(JAVA_LANG_STRING))
             .andThen(args.get(3))
-            .andThen(Expr.checkcast(jt))
+            // .andThen(Expr.checkcast(jt))
             .andThen(jvm.getfield(jref)) // thiz
             .andThen(Expr.checkcast(JAVA_LANG_OBJECT))
             .andThen(args.get(4))
@@ -543,14 +537,38 @@ public class Intrinsix extends ANY implements ClassFileConstants
             .andThen(jvm.getfield(data)) // args
             .andThen(Expr.checkcast(JAVA_LANG_STRING.array()))
             .andThen(Expr.invokeStatic(Names.RUNTIME_CLASS,
-                                       "fuzion_java_call_c0",
-                                       "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",
-                                       Names.JAVA_LANG_OBJECT))
+                                    "fuzion_java_call_v0",
+                                    "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",
+                                    Names.JAVA_LANG_OBJECT))
             .andThen(Expr.checkcast(JAVA_LANG_OBJECT))
-            .andThen(jvm.putfield(jref2))
-            .andThen(Expr.checkcast(rt))
-            .is(rt);
-          return new Pair<>(res, Expr.UNIT);
+            ;
+          var rc = jvm._fuir.clazzResultClazz(cc);
+          var res = switch (jvm._fuir.getSpecialId(rc))
+            {
+              // case c_i8 -> Expr.UNIT;
+              // case c_u16 -> Expr.UNIT;
+              // case c_i16 -> Expr.UNIT;
+              // case c_i32 -> Expr.UNIT;
+              // case c_i64 -> Expr.UNIT;
+              // case c_f32 -> Expr.UNIT;
+              // case c_f64 -> Expr.UNIT;
+              // case c_bool -> Expr.UNIT;
+              case c_unit -> exec;
+              default -> {
+                var rcv = jvm._fuir.clazzAsValue(rc);
+                var rt = jvm._types.javaType(rc);
+                var jref2 = jvm._fuir.clazzField(rcv, 0);
+
+                yield
+                  jvm.new0(rc)
+                  .andThen(Expr.DUP)
+                  .andThen(exec)
+                  .andThen(jvm.putfield(jref2))
+                  .andThen(Expr.checkcast(rt))
+                  .is(rt);
+              }
+            };
+          return new Pair<>(Expr.UNIT, res);
         });
 
     put("fuzion.java.call_s0",
