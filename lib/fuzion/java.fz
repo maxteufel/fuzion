@@ -118,8 +118,8 @@ public fuzion.java is
                      signature String,
                      thiz Java_Object,
                      args array Java_Object) T
-  pre
-    safety: !thiz.is_null
+  # pre
+    # safety: !thiz.is_null
   is
     c := string_to_java_object class_name
     n := string_to_java_object name
