@@ -732,7 +732,7 @@ public class Runtime extends ANY
     Throwable err = null;
     Method m = null;
     Constructor co = null;
-    var  p = JavaInterface.getPars(sig);
+    var p = JavaInterface.getPars(sig);
     if (p == null)
       {
         Errors.fatal("could not parse signature >>"+sig+"<<");
